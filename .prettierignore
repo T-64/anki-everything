@@ -1,0 +1,8 @@
+android/
+dist/
+release/
+node_modules/
+.wrangler/
+package-lock.json
+docs/
+*.md

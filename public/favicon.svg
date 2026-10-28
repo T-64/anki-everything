@@ -1,0 +1,9 @@
+<!-- 应用图标：取景框里一个被荧光笔划过的 ä（tools/icon.py 生成的 PNG 是正式版本） -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" fill="#141414"/>
+  <g stroke="#F2F2F0" stroke-width="34" stroke-linecap="round" fill="none">
+    <path d="M206 338V206H338M686 206H818V338M818 686V818H686M338 818H206V686"/>
+  </g>
+  <polygon points="328,512 748,483 722,667 302,696" fill="#E9FF3B"/>
+  <text x="512" y="668" text-anchor="middle" font-family="Archivo, 'Arial Black', sans-serif" font-weight="800" font-size="520" fill="#F2F2F0">ä</text>
+</svg>

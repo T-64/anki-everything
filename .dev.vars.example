@@ -1,0 +1,3 @@
+# Copy to .dev.vars (gitignored). In production set these with `wrangler secret put`.
+APP_KEY=change-me-to-a-long-random-string
+LLM_API_KEY=your-model-provider-key

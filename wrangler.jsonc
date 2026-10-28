@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "anki-everything",
+  "main": "./src/worker/index.ts",
+  "compatibility_date": "2026-08-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"],
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "anki-everything",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "r2_buckets": [{ "binding": "IMAGES", "bucket_name": "anki-everything-images" }],
+  // 消费者崩溃（比如超出 CPU 时间）时没机会写“失败”，靠这里的日志和队列重试兜底
+  "observability": { "enabled": true },
+  // 识别放在队列里跑：消费者有 15 分钟，waitUntil 在免费版只有 30 秒。并发 2，免得同时打爆模型接口
+  "queues": {
+    "producers": [{ "binding": "ANALYZE", "queue": "anki-everything-analyze" }],
+    "consumers": [{ "queue": "anki-everything-analyze", "max_batch_size": 1, "max_concurrency": 2, "max_retries": 2 }],
+  },
+  // 密钥 APP_KEY 和（可选的）LLM_API_KEY：本地放 .dev.vars，线上用 wrangler secret put。
+  // 学的语言、讲解语言、水平、牌组、prompt 在 App 的设置页里改（存 D1）
+  "vars": {
+    "LLM_ENDPOINT": "https://open.bigmodel.cn/api/coding/paas/v4/chat/completions",
+    "LLM_MODEL": "glm-5.3-flash",
+    // 先推理再回答：构词、词源、语法明显更准（2026-10-27 用 3 个真实例子对比过），代价是每次多 1–2 分钟
+    "LLM_THINKING": "enabled",
+    "APP_TIME_ZONE": "Europe/Berlin",
+    "DAILY_CAPTURE_LIMIT": "50",
+  },
+}

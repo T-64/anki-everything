@@ -1,0 +1,61 @@
+{
+  "name": "anki-everything",
+  "version": "1.2.0",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:app": "vite build --mode app && cap sync android",
+    "apk": "npm run build:app && cd android && ./gradlew assembleDebug",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run --config vitest.config.ts",
+    "db:migrate": "wrangler d1 migrations apply anki-everything --local",
+    "deploy": "node scripts/deploy.mjs",
+    "apk:release": "npm run build:app && cd android && ./gradlew assembleRelease && cd .. && mkdir -p release && cp android/app/build/outputs/apk/release/app-release.apk release/AnkiEverything-$npm_package_version.apk"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.5.3",
+    "@capacitor/haptics": "8.0.2",
+    "@fontsource-variable/archivo": "5.3.0",
+    "hono": "4.13.3",
+    "lucide-react": "1.55.0",
+    "motion": "14.1.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "4.4.3",
+    "zustand": "5.0.15"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.3",
+    "@cloudflare/vite-plugin": "1.53.1",
+    "@cloudflare/workers-types": "5.20260823.1",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.0",
+    "prettier": "3.6.2",
+    "typescript": "7.0.2",
+    "vite": "8.2.2",
+    "vitest": "4.1.11",
+    "wrangler": "4.125.0"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "workerd": true,
+    "fsevents": false
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "description": "Photograph anything, get one Anki card that teaches it. Writes straight into AnkiDroid.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/T-64/anki-everything.git"
+  }
+}

@@ -1,0 +1,26 @@
+node_modules
+dist
+.wrangler
+.dev.vars
+.env.app.local
+
+# Android 构建产物（android/ 目录本身进 git）
+android/.gradle
+android/build
+android/app/build
+android/local.properties
+android/app/src/main/assets/public
+android/capacitor-cordova-android-plugins
+*.apk
+.prod-app-key
+
+# 正式版签名（丢了就没法覆盖升级已安装的 App，要另外备份）
+android/keystore.properties
+android/*.jks
+release/
+.DS_Store
+prompts.local/
+
+# 部署时填进 wrangler.jsonc 的真实 D1 id（scripts/deploy.mjs）
+.d1-database-id
+wrangler.deploy.jsonc
