@@ -244,7 +244,7 @@ function useCardCrop(id: string) {
 }
 
 /** 草稿页的通用部分：忙碌状态、出错提示、确认（做成卡片后停一下再回列表）、丢弃 */
-function useDraft(capture: CaptureView, onChange: (capture: CaptureView) => void) {
+function useDraft(capture: CaptureView) {
   const remove = useStore((state) => state.remove);
   const sync = useStore((state) => state.sync);
   const [busy, setBusy] = useState<Busy>(null);
@@ -268,9 +268,11 @@ function useDraft(capture: CaptureView, onChange: (capture: CaptureView) => void
       const next = await api.confirm(capture.id, card, cropped);
       haptic.success();
       setDone(true);
-      // 留一下“已做成卡片”再回到列表；写进 AnkiDroid 在后台进行
+      // 留一下“已做成卡片”再回到列表；写进 AnkiDroid 在后台进行。
+      // 只更新列表，不更新这一页：关闭的同时把编辑页换成预览，会在退出动画里新挂上一层“纸”，
+      // 它永远等不到退出，透明的详情层就一直盖在首页上，点哪里都没反应。
       window.setTimeout(() => {
-        onChange(next);
+        useStore.getState().replace(next);
         useStore.getState().close();
         void sync();
       }, 700);
@@ -353,7 +355,7 @@ function Editor({ capture, card: initial, onChange }: { capture: LanguageCapture
   const [card, setCard] = useState(initial);
   const [sheet, setSheet] = useState<"sentences" | "add" | null>(null);
   const { cropped, controls } = useCardCrop(capture.id);
-  const { busy, done, error, run, confirm, discard } = useDraft(capture, onChange);
+  const { busy, done, error, run, confirm, discard } = useDraft(capture);
 
   useServerCard(initial, setCard);
 
@@ -529,7 +531,7 @@ function NoteEditor({ capture, card: initial, onChange }: { capture: NoteCapture
   const [card, setCard] = useState(initial);
   const front = useRef<HTMLTextAreaElement>(null);
   const { cropped, controls } = useCardCrop(capture.id);
-  const { busy, done, error, confirm, discard } = useDraft(capture, onChange);
+  const { busy, done, error, confirm, discard } = useDraft(capture);
   useServerCard(initial, setCard);
 
   const mark = () => {

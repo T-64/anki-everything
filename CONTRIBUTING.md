@@ -42,6 +42,7 @@ Without `LLM_API_KEY` the app runs in No AI mode only, which is enough for most 
 
 - **Only `html` scrolls.** If `body` also gets `overflow`, it becomes an empty scroll container, and with `overscroll-behavior` Android WebView touch scrolling gets stuck on it. Block horizontal scrolling with `overflow-x: clip`, not `hidden`. Desktop browsers don't show this bug.
 - **Labels inside controls need `white-space: nowrap`.** Long German words are allowed to break anywhere, and without `nowrap` a squeezed filter label breaks too.
+- **Don't change a layer's content while it is closing.** Swapping the content of an overlay in the same tick as closing it mounts a new animated child inside an exiting `AnimatePresence`; that child never exits, and the invisible overlay stays on top and swallows every tap. Update the list, then close.
 - **A refetch must not overwrite edits.** Drafts only take server data when its content actually changed (`useServerCard` in the detail page).
 - **A browser preview is not a phone.** Gestures, the back button, the status bar and vendors freezing AnkiDroid in the background only show up on a device.
 
