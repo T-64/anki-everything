@@ -40,9 +40,10 @@ export function Login() {
       </h1>
       <form onSubmit={submit}>
         {needsServer && (
+          // 不用 type="url"：浏览器会要求带 https://，并弹英文提示。地址由 normalizeServer 补全
           <input
             className="field"
-            type="url"
+            type="text"
             inputMode="url"
             autoCapitalize="off"
             autoCorrect="off"
